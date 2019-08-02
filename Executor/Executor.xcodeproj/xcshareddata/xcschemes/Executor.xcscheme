@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
    LastUpgradeVersion = "1030"
-   wasCreatedForAppExtension = "YES"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -15,24 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DD2779161C7CD144005A1529"
-               BuildableName = "Open Terminal Finder Extension.appex"
-               BlueprintName = "Open Terminal Finder Extension"
-               ReferencedContainer = "container:OpenTerminal.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DD2778D81C7CCBB4005A1529"
-               BuildableName = "Open Terminal.app"
-               BlueprintName = "Open Terminal"
-               ReferencedContainer = "container:OpenTerminal.xcodeproj">
+               BlueprintIdentifier = "1F16DF5122F4650900263E17"
+               BuildableName = "Executor.app"
+               BlueprintName = "Executor"
+               ReferencedContainer = "container:Executor.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -47,10 +32,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DD2779161C7CD144005A1529"
-            BuildableName = "Open Terminal Finder Extension.appex"
-            BlueprintName = "Open Terminal Finder Extension"
-            ReferencedContainer = "container:OpenTerminal.xcodeproj">
+            BlueprintIdentifier = "1F16DF5122F4650900263E17"
+            BuildableName = "Executor.app"
+            BlueprintName = "Executor"
+            ReferencedContainer = "container:Executor.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -58,28 +43,24 @@
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
-      selectedDebuggerIdentifier = ""
-      selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <PathRunnable
-         runnableDebuggingMode = "0"
-         BundleIdentifier = "com.apple.finder"
-         FilePath = "/System/Library/CoreServices/Finder.app">
-      </PathRunnable>
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DD2779161C7CD144005A1529"
-            BuildableName = "Open Terminal Finder Extension.appex"
-            BlueprintName = "Open Terminal Finder Extension"
-            ReferencedContainer = "container:OpenTerminal.xcodeproj">
+            BlueprintIdentifier = "1F16DF5122F4650900263E17"
+            BuildableName = "Executor.app"
+            BlueprintName = "Executor"
+            ReferencedContainer = "container:Executor.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -88,16 +69,15 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
-      debugDocumentVersioning = "YES"
-      launchAutomaticallySubstyle = "2">
+      debugDocumentVersioning = "YES">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DD2778D81C7CCBB4005A1529"
-            BuildableName = "Open Terminal.app"
-            BlueprintName = "Open Terminal"
-            ReferencedContainer = "container:OpenTerminal.xcodeproj">
+            BlueprintIdentifier = "1F16DF5122F4650900263E17"
+            BuildableName = "Executor.app"
+            BlueprintName = "Executor"
+            ReferencedContainer = "container:Executor.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

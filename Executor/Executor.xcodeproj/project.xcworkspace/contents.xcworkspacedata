@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:OpenTerminal.xcodeproj">
+      location = "self:Executor.xcodeproj">
    </FileRef>
 </Workspace>

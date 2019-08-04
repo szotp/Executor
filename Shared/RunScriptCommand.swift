@@ -22,12 +22,17 @@ struct ScriptInfo: Codable {
     
     static func load() -> [ScriptInfo] {
         var result: [ScriptInfo] = []
+
         let dir = scriptsURL
         let fm = FileManager.default
         
+        if !fm.fileExists(atPath: dir.path) {
+            try! fm.createDirectory(at: dir, withIntermediateDirectories: true, attributes: nil)
+        }
+        
         let contents = try! fm.contentsOfDirectory(at: dir, includingPropertiesForKeys: nil, options: [])
         for file in contents {
-            if fm.isExecutableFile(atPath: file.path) || file.pathExtension == "sh" {
+            if fm.isExecutableFile(atPath: file.path) || file.pathExtension == "sh" || file.pathExtension == "" {
                 result.append(ScriptInfo(url: file, title: file.lastPathComponent))
             }
         }
@@ -47,29 +52,24 @@ struct RunScriptCommand: Codable {
         NSWorkspace.shared.open(url)
     }
     
-    static func runInTerminal() {
-        let url = groupContainerURL.appendingPathComponent("script.sh")
-        print(url.path)
+    static func decode(url: URL) -> RunScriptCommand {
+        var string = url.absoluteString
+        let range = string.range(of: "executor://")!
+        string.replaceSubrange(range, with: "")
         
-        let appURL = URL(fileURLWithPath: "/Applications/Utilities/Terminal.app")
-        
-        let copyToURL = URL(fileURLWithPath: NSHomeDirectory() + "/Desktop/script.sh")
-        try? FileManager.default.copyItem(at: url, to: copyToURL)
-        
-        let configuration = [NSWorkspace.LaunchConfigurationKey.arguments: [copyToURL]]
-        try! NSWorkspace.shared.launchApplication(at: appURL, options: [], configuration:configuration)
+
+        let data = Data(base64Encoded: string)!
+        let decoder = JSONDecoder()
+        return try! decoder.decode(self, from: data)
+    }
+    
+    func encode() -> URL {
+        let encoder = JSONEncoder()
+        let data = try! encoder.encode(self)
+        return URL(string: "executor://" + data.base64EncodedString())!
     }
     
     func sendToParent() {
-        var content: [String] = []
-        content.append("cd \(currentDirectory.path)")
-        content.append("chmod +x \(script.url.path)")
-        content.append("\(script.url.path)")
-        
-        let url = groupContainerURL.appendingPathComponent("script.sh")
-        try? FileManager.default.removeItem(at: url)
-        try! content.joined(separator: "\n").write(to: url, atomically: true, encoding: .utf8)
-        
-        NSWorkspace.shared.open(URL(string: "executor://runInTerminal")!)
+        NSWorkspace.shared.open(encode())
     }
 }

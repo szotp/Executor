@@ -44,7 +44,6 @@ class FinderSync: FIFinderSync {
         let target = FIFinderSyncController.default().targetedURL()!
         let items = FIFinderSyncController.default().selectedItemURLs()
         let scriptWithInput = RunScriptCommand(currentDirectory: target, script: scripts[item.tag], items: items)
-        
         scriptWithInput.sendToParent()
     }
 }

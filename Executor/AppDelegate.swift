@@ -15,6 +15,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func enableExtension() {
         dlog("enabling extension")
+
+        let fm = FileManager.default
+        if !fm.fileExists(atPath: launcherURL.path) {
+            let fromBundle = Bundle.main.url(forResource: "launcher", withExtension: "sh")!
+            try! fm.copyItem(at: fromBundle, to: launcherURL)
+            execute("/bin/chmod", ["+x", launcherURL.path])
+        }
+        
         let pluginsURL = Bundle.main.builtInPlugInsURL!
         let plugins = try! FileManager.default.contentsOfDirectory(at: pluginsURL, includingPropertiesForKeys: nil, options: [])
         execute("/usr/bin/pluginkit", ["-e", "use", "-a", plugins[0].path])
@@ -27,20 +35,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         //https://github.com/qparis/FinderOpenTerminal
         
         enableExtension()
-        //CommandRunner.testRunner().runThroughService()
-        
         
         //CommandRunner.testRunner().run()
-        //Thread.sleep(forTimeInterval: 0.5)
         exit(0)
     }
     
-    func application(_ application: NSApplication, open urls: [URL]) {
-        let url = urls[0]
-        dlog("\(url)")
-        let decoded = RunScriptCommand.decode(url: url)
-        
-        CommandRunner(command: decoded).run()
-        //exit(0)
-    }
+//    func application(_ application: NSApplication, open urls: [URL]) {
+//        let url = urls[0]
+//        dlog("\(url)")
+//        let decoded = RunScriptCommand.decode(url: url)
+//        
+//        CommandRunner(command: decoded).run()
+//        //exit(0)
+//    }
 }

@@ -21,18 +21,19 @@ class FinderSync: FIFinderSync {
     var scripts: [ScriptInfo] = []
     
     override func menu(for menuKind: FIMenuKind) -> NSMenu {
+        scripts = ScriptInfo.load()
+        let scripts = self.scripts
+        
         let menu = NSMenu()
         let item = menu.addItem(withTitle: "Executor", action: nil, keyEquivalent: "")
         item.submenu = NSMenu()
         
-        scripts = ScriptInfo.load()
         for (i, script) in scripts.enumerated() {
-            let subitem = item.submenu!.addItem(withTitle: script.title, action: #selector(executeScript), keyEquivalent: "")
+            let subitem = item.submenu!.addItem(withTitle: script.title, action: #selector(self.executeScript), keyEquivalent: "")
             subitem.tag = i
         }
         
-        item.submenu!.addItem(withTitle: "Open scripts", action: #selector(openScriptsDirectory), keyEquivalent: "")
-        
+        item.submenu!.addItem(withTitle: "Open scripts", action: #selector(self.openScriptsDirectory), keyEquivalent: "")
         return menu
     }
     

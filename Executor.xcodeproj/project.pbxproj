@@ -14,8 +14,9 @@
 		1F16DF6F22F4654900263E17 /* FinderExecutor.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 1F16DF6722F4654900263E17 /* FinderExecutor.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		1F16DF7522F46A1000263E17 /* RunScriptCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F16DF7422F46A1000263E17 /* RunScriptCommand.swift */; };
 		1F16DF7622F46A7600263E17 /* RunScriptCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F16DF7422F46A1000263E17 /* RunScriptCommand.swift */; };
-		1F6DFDD522F6CD2600589990 /* CommandRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6DFDD322F6CD1C00589990 /* CommandRunner.swift */; };
-		1F6DFDD622F6CE6C00589990 /* CommandRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6DFDD322F6CD1C00589990 /* CommandRunner.swift */; };
+		1F6DFDD522F6CD2600589990 /* Runner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6DFDD322F6CD1C00589990 /* Runner.swift */; };
+		1F6DFDD622F6CE6C00589990 /* Runner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6DFDD322F6CD1C00589990 /* Runner.swift */; };
+		1F6DFDDC22F6E9B600589990 /* launcher.sh in Resources */ = {isa = PBXBuildFile; fileRef = 1F6DFDDB22F6E9B600589990 /* launcher.sh */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,7 +65,8 @@
 		1F16DF6B22F4654900263E17 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1F16DF6C22F4654900263E17 /* FinderExecutor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FinderExecutor.entitlements; sourceTree = "<group>"; };
 		1F16DF7422F46A1000263E17 /* RunScriptCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunScriptCommand.swift; sourceTree = "<group>"; };
-		1F6DFDD322F6CD1C00589990 /* CommandRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandRunner.swift; sourceTree = "<group>"; };
+		1F6DFDD322F6CD1C00589990 /* Runner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Runner.swift; sourceTree = "<group>"; };
+		1F6DFDDB22F6E9B600589990 /* launcher.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = launcher.sh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,7 +132,8 @@
 			isa = PBXGroup;
 			children = (
 				1F16DF7422F46A1000263E17 /* RunScriptCommand.swift */,
-				1F6DFDD322F6CD1C00589990 /* CommandRunner.swift */,
+				1F6DFDD322F6CD1C00589990 /* Runner.swift */,
+				1F6DFDDB22F6E9B600589990 /* launcher.sh */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -189,7 +192,7 @@
 						CreatedOnToolsVersion = 10.3;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.Mac = {
-								enabled = 1;
+								enabled = 0;
 							};
 							com.apple.Sandbox = {
 								enabled = 0;
@@ -200,7 +203,7 @@
 						CreatedOnToolsVersion = 10.3;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.Mac = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};
@@ -231,6 +234,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1F16DF5822F4650900263E17 /* Assets.xcassets in Resources */,
+				1F6DFDDC22F6E9B600589990 /* launcher.sh in Resources */,
 				1F16DF5B22F4650900263E17 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -250,7 +254,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1F16DF7522F46A1000263E17 /* RunScriptCommand.swift in Sources */,
-				1F6DFDD522F6CD2600589990 /* CommandRunner.swift in Sources */,
+				1F6DFDD522F6CD2600589990 /* Runner.swift in Sources */,
 				1F16DF5622F4650900263E17 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -260,7 +264,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1F16DF7622F46A7600263E17 /* RunScriptCommand.swift in Sources */,
-				1F6DFDD622F6CE6C00589990 /* CommandRunner.swift in Sources */,
+				1F6DFDD622F6CE6C00589990 /* Runner.swift in Sources */,
 				1F16DF6A22F4654900263E17 /* FinderSync.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

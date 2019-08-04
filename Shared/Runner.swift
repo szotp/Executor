@@ -18,45 +18,45 @@ extension URL {
 struct CommandRunner {
     let command: RunScriptCommand
     
-    func run() {
-        dlog("CommandRunner.run")
-        
-        let fm = FileManager.default
-        let scriptURL = command.script.url
-        
-        if !fm.fileExists(atPath: scriptURL.path) {
-            fatalError()
-        }
-        
-        if !fm.isExecutableFile(atPath: scriptURL.path) {
-            execute("/bin/chmod", ["+x", scriptURL.path])
-        }
-        
-        var shellSource: [String] = []
-        shellSource.append("cd " + command.currentDirectory.shellPath)
-        shellSource.append(command.script.url.shellPath)
-        
-        
-        let source = """
-        tell application "Terminal"
-            set shell to do script "cd '\(command.currentDirectory.path)'"
-            do script "EXECUTOR='\(command.script.url.path)'" in shell
-            do script "clear" in shell
-            activate in shell
-            do script "\\"$EXECUTOR\\"" in shell
-        end tell
-        """
-        
-        print(source)
-        
-        let script = NSAppleScript(source: source)
-        
-        var errorInfo: NSDictionary?
-        script?.executeAndReturnError(&errorInfo)
-        assert(errorInfo == nil, "\(errorInfo!)")
-        
-        exit(0)
-    }
+//    func run() {
+//        dlog("CommandRunner.run")
+//        
+//        let fm = FileManager.default
+//        let scriptURL = command.script.url
+//        
+//        if !fm.fileExists(atPath: scriptURL.path) {
+//            fatalError()
+//        }
+//        
+//        if !fm.isExecutableFile(atPath: scriptURL.path) {
+//            execute("/bin/chmod", ["+x", scriptURL.path])
+//        }
+//        
+//        var shellSource: [String] = []
+//        shellSource.append("cd " + command.currentDirectory.shellPath)
+//        shellSource.append(command.script.url.shellPath)
+//        
+//        
+//        let source = """
+//        tell application "Terminal"
+//            set shell to do script "cd '\(command.currentDirectory.path)'"
+//            do script "EXECUTOR='\(command.script.url.path)'" in shell
+//            do script "clear" in shell
+//            activate in shell
+//            do script "\\"$EXECUTOR\\"" in shell
+//        end tell
+//        """
+//        
+//        print(source)
+//        
+//        let script = NSAppleScript(source: source)
+//        
+//        var errorInfo: NSDictionary?
+//        script?.executeAndReturnError(&errorInfo)
+//        assert(errorInfo == nil, "\(errorInfo!)")
+//        
+//        exit(0)
+//    }
     
     static func testRunner() -> CommandRunner {
         var scripts = ScriptInfo.load()
@@ -73,7 +73,20 @@ struct CommandRunner {
     }
     
     func runInParentApp() {
-        NSWorkspace.shared.open(command.encode())
+        let task = try! NSUserUnixTask(url: launcherURL)
+        
+        var arguments: [String] = []
+        arguments.append(command.currentDirectory.path)
+        arguments.append(command.script.url.path)
+        
+        for item in command.items ?? [] {
+            arguments.append(item.path)
+        }
+        
+        dlog("NSUserUnixTask")
+        task.execute(withArguments: arguments) { (error) in
+            dlog(error)
+        }
     }
     
     static func openScriptsDirectory() {

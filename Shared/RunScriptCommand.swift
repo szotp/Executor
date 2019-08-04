@@ -8,36 +8,57 @@
 
 import Cocoa
 
-private let groupName = "RsrSJD54Rq6XkDxvB6XjIMsf.Executor"
-public let groupContainerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: groupName)!
-public let scriptsURL = groupContainerURL.appendingPathComponent("Scripts")
+let fm = FileManager.default
 
-func dlog(_ x: Any) {
-    NSLog("\(x)")
+func dlog(_ x: Any?) {
+    if let x = x {
+        NSLog("\(x)")
+    }
 }
+
+public let scriptsURL: URL = {
+    let fm = FileManager.default
+    var result = try! fm.url(for: .applicationScriptsDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+    result.deleteLastPathComponent()
+    result.appendPathComponent("szotp.Executor.FinderExecutor")
+    return result
+}()
+
+public let launcherURL = scriptsURL.appendingPathComponent("launcher")
+
 
 struct ScriptInfo: Codable {
     let url: URL
     let title: String
     
-    static func load() -> [ScriptInfo] {
-        var result: [ScriptInfo] = []
-
-        let dir = scriptsURL
-        let fm = FileManager.default
+    static func fromURL(_ url: URL) -> ScriptInfo {
+        return ScriptInfo(url: url, title: url.lastPathComponent)
+    }
+    
+    static func isScript(url: URL) -> Bool {
+        if url == launcherURL {
+            return false
+        }
         
+        let name = url.lastPathComponent
+        let ext = url.pathExtension
+        
+        if name.starts(with: ".") {
+            return false
+        }
+        
+        return fm.isExecutableFile(atPath: url.path) || ext == "sh" || ext == ""
+    }
+    
+    static func load() -> [ScriptInfo] {
+        let dir = scriptsURL
+
         if !fm.fileExists(atPath: dir.path) {
             try! fm.createDirectory(at: dir, withIntermediateDirectories: true, attributes: nil)
         }
         
-        let contents = try! fm.contentsOfDirectory(at: dir, includingPropertiesForKeys: nil, options: [])
-        for file in contents {
-            if fm.isExecutableFile(atPath: file.path) || file.pathExtension == "sh" || file.pathExtension == "" {
-                result.append(ScriptInfo(url: file, title: file.lastPathComponent))
-            }
-        }
-        
-        return result
+        let contents = try! fm.contentsOfDirectory(at: dir, includingPropertiesForKeys: [.isExecutableKey], options: [])
+        return contents.filter(isScript).map(ScriptInfo.fromURL)
     }
 }
 

@@ -33,6 +33,9 @@ class FinderSync: FIFinderSync {
             subitem.tag = i
         }
         
+        let separator = NSMenuItem.separator()
+        
+        item.submenu!.addItem(separator)
         item.submenu!.addItem(withTitle: "Open scripts", action: #selector(self.openScriptsDirectory), keyEquivalent: "")
         return menu
     }

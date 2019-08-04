@@ -37,14 +37,14 @@ class FinderSync: FIFinderSync {
     }
     
     @objc func openScriptsDirectory() {
-        RunScriptCommand.openScriptsDirectory()
+        CommandRunner.openScriptsDirectory()
     }
     
     @objc func executeScript(item: NSMenuItem) {
         let target = FIFinderSyncController.default().targetedURL()!
         let items = FIFinderSyncController.default().selectedItemURLs()
-        let scriptWithInput = RunScriptCommand(currentDirectory: target, script: scripts[item.tag], items: items)
-        scriptWithInput.sendToParent()
+        let command = RunScriptCommand(currentDirectory: target, script: scripts[item.tag], items: items)
+        CommandRunner(command: command).runInParentApp()
     }
 }
 

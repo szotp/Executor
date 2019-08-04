@@ -46,12 +46,6 @@ struct RunScriptCommand: Codable {
     let script: ScriptInfo
     let items: [URL]?
     
-    static func openScriptsDirectory() {
-        let url = scriptsURL
-        try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: false, attributes: nil)
-        NSWorkspace.shared.open(url)
-    }
-    
     static func decode(url: URL) -> RunScriptCommand {
         var string = url.absoluteString
         let range = string.range(of: "executor://")!
@@ -67,9 +61,5 @@ struct RunScriptCommand: Codable {
         let encoder = JSONEncoder()
         let data = try! encoder.encode(self)
         return URL(string: "executor://" + data.base64EncodedString())!
-    }
-    
-    func sendToParent() {
-        NSWorkspace.shared.open(encode())
     }
 }

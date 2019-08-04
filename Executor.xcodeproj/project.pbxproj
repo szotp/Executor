@@ -38,6 +38,16 @@
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		1F7D68D422F48E8900EA8BE3 /* Embed XPC Services */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/XPCServices";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			name = "Embed XPC Services";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -132,6 +142,7 @@
 				1F16DF4F22F4650900263E17 /* Frameworks */,
 				1F16DF5022F4650900263E17 /* Resources */,
 				1F16DF7322F4654900263E17 /* Embed App Extensions */,
+				1F7D68D422F48E8900EA8BE3 /* Embed XPC Services */,
 			);
 			buildRules = (
 			);
@@ -172,9 +183,22 @@
 				TargetAttributes = {
 					1F16DF5122F4650900263E17 = {
 						CreatedOnToolsVersion = 10.3;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.Mac = {
+								enabled = 1;
+							};
+							com.apple.Sandbox = {
+								enabled = 0;
+							};
+						};
 					};
 					1F16DF6622F4654900263E17 = {
 						CreatedOnToolsVersion = 10.3;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.Mac = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -380,6 +404,7 @@
 				CODE_SIGN_ENTITLEMENTS = Executor/Executor.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Executor/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -399,6 +424,7 @@
 				CODE_SIGN_ENTITLEMENTS = Executor/Executor.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Executor/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

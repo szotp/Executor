@@ -19,6 +19,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             forEventClass: AEEventClass(kInternetEventClass),
             andEventID: AEEventID(kAEGetURL)
         )
+        
+        RunScriptCommand.runInTerminal()
     }
     
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -26,19 +28,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @objc func openURL(event: NSAppleEventDescriptor, reply: NSAppleEventDescriptor) {
-        dlog("event")
-        let urlString = event.paramDescriptor(forKeyword: keyDirectObject)!.stringValue!
-        let url = URL(string: urlString)!
-        let parsed = RunScriptCommand.decode(url: url)
-        
-        dlog(url)
-        dlog("\(parsed)")
+        RunScriptCommand.runInTerminal()
     }
-
-    func applicationWillTerminate(_ aNotification: Notification) {
-        // Insert code here to tear down your application
-    }
-
-
 }
 

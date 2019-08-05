@@ -59,15 +59,15 @@ struct CommandRunner {
 //    }
     
     static func testRunner() -> CommandRunner {
-        var scripts = ScriptInfo.load()
+        var scripts = ScriptData.load()
         
-        if scripts.isEmpty {
+        if scripts.script.isEmpty {
             let url = scriptsURL.appendingPathComponent("hello_world.sh")
             try! "ls".write(to: url, atomically: true, encoding: .utf8)
-            scripts = ScriptInfo.load()
+            scripts = ScriptData.load()
         }
         
-        let script = scripts.first(where: { $0.url.lastPathComponent == "hello_world.sh"})!
+        let script = scripts.script.first(where: { $0.url.lastPathComponent == "hello_world.sh"})!
         let command = RunScriptCommand(currentDirectory: URL(fileURLWithPath: NSHomeDirectory()), script: script, items: nil)
         return CommandRunner(command: command)
     }

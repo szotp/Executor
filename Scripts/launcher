@@ -8,17 +8,17 @@ TEMP_SCRIPT+="script.sh"
 /bin/cat <<EOM >$TEMP_SCRIPT
 cd "$1"
 SCRIPT="$2"
-
 clear
 "\$SCRIPT" $PARAMS
 EOM
 
 chmod +x $TEMP_SCRIPT
-echo "$TEMP_SCRIPT"
+chmod +x "$2"
 
 osascript <<END
-tell application "Terminal" 
-    set shell to do script ". $TEMP_SCRIPT"
+tell application "Terminal"
+    set shell to do script ""
     activate in shell
+    do script ". $TEMP_SCRIPT" in shell
 end tell
 END

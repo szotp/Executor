@@ -15,28 +15,28 @@ class FinderSync: FIFinderSync {
     
     override init() {
         super.init()
+        
+        
         FIFinderSyncController.default().directoryURLs = [URL(fileURLWithPath: "/")]
     }
     
-    var scripts: [ScriptInfo] = []
+    var scripts: ScriptData!
     
     override func menu(for menuKind: FIMenuKind) -> NSMenu {
-        scripts = ScriptInfo.load()
-        let scripts = self.scripts
+        scripts = ScriptData.load()
+        let target = FIFinderSyncController.default().targetedURL()!
+        let items = FIFinderSyncController.default().selectedItemURLs()
+        dlog(target)
+        dlog(items)
         
         let menu = NSMenu()
-        let item = menu.addItem(withTitle: "Executor", action: nil, keyEquivalent: "")
-        item.submenu = NSMenu()
         
-        for (i, script) in scripts.enumerated() {
-            let subitem = item.submenu!.addItem(withTitle: script.title, action: #selector(self.executeScript), keyEquivalent: "")
+        for (i, script) in scripts.script.enumerated() {
+            let subitem = menu.addItem(withTitle: script.title, action: #selector(self.executeScript), keyEquivalent: "")
             subitem.tag = i
         }
         
-        let separator = NSMenuItem.separator()
-        
-        item.submenu!.addItem(separator)
-        item.submenu!.addItem(withTitle: "Open scripts", action: #selector(self.openScriptsDirectory), keyEquivalent: "")
+        menu.addItem(withTitle: "Open scripts", action: #selector(self.openScriptsDirectory), keyEquivalent: "")
         return menu
     }
     
@@ -47,7 +47,7 @@ class FinderSync: FIFinderSync {
     @objc func executeScript(item: NSMenuItem) {
         let target = FIFinderSyncController.default().targetedURL()!
         let items = FIFinderSyncController.default().selectedItemURLs()
-        let command = RunScriptCommand(currentDirectory: target, script: scripts[item.tag], items: items)
+        let command = RunScriptCommand(currentDirectory: target, script: scripts.script[item.tag], items: items)
         CommandRunner(command: command).runInParentApp()
     }
 }

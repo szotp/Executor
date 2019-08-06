@@ -23,15 +23,23 @@ class FinderSync: FIFinderSync {
     var scripts: ScriptData!
     
     override func menu(for menuKind: FIMenuKind) -> NSMenu {
+        let time = Date()
+        defer {
+            dlog("\(#function) took \(-time.timeIntervalSinceNow * 1000)ms")
+        }
+        
         scripts = ScriptData.load()
         let target = FIFinderSyncController.default().targetedURL()!
-        let items = FIFinderSyncController.default().selectedItemURLs()
-        dlog(target)
-        dlog(items)
+        let items = FIFinderSyncController.default().selectedItemURLs() ?? []
         
         let menu = NSMenu()
-        
         for (i, script) in scripts.script.enumerated() {
+            let command = RunScriptCommand(currentDirectory: target, script: script, items: items)
+            
+            if !command.canRun {
+                continue
+            }
+            
             let subitem = menu.addItem(withTitle: script.title, action: #selector(self.executeScript), keyEquivalent: "")
             subitem.tag = i
         }
@@ -46,7 +54,7 @@ class FinderSync: FIFinderSync {
     
     @objc func executeScript(item: NSMenuItem) {
         let target = FIFinderSyncController.default().targetedURL()!
-        let items = FIFinderSyncController.default().selectedItemURLs()
+        let items = FIFinderSyncController.default().selectedItemURLs() ?? []
         let command = RunScriptCommand(currentDirectory: target, script: scripts.script[item.tag], items: items)
         CommandRunner(command: command).runInParentApp()
     }

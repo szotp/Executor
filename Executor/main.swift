@@ -15,18 +15,11 @@ func copyScriptsIfNeeded() {
     try? fm.createDirectory(at: scriptsURL, withIntermediateDirectories: true, attributes: nil)
     
     for file in contents {
-        var destination = scriptsURL.appendingPathComponent(file.lastPathComponent)
-        
-        if file.lastPathComponent == "launcher" {
-            destination = launcherURL
-        }
-        
-        try? fm.removeItem(at: destination)
-        //try! fm.createSymbolicLink(at: destination, withDestinationURL: file)
-        try! fm.copyItem(at: file, to: destination)
+        let dst = scriptsURL.appendingPathComponent(file.lastPathComponent)
+        try? fm.removeItem(at: dst)
+        try! fm.copyItem(at: file, to: dst)
+        execute("/bin/chmod", ["+x", dst.path])
     }
-    
-    assert(fm.fileExists(atPath: launcherURL.path))
 }
 
 func enableExtension() {

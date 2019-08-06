@@ -16,7 +16,7 @@ func dlog(_ x: Any?) {
     }
 }
 
-public let launcherURL: URL = scriptsURL.appendingPathComponent("launcher")
+//public let launcherURL: URL = scriptsURL.appendingPathComponent("launcher")
 
 public let scriptsURL: URL = {
     var url = try! fm.url(for: .applicationScriptsDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
@@ -56,13 +56,11 @@ struct ScriptInfo: Codable {
     let url: URL
     let title: String
     let extensions: Set<String>?
+    var launcher: String
     
-    static let regex = try! NSRegularExpression(pattern: "([a-zA-Z0-9_]*)='(.*)'", options: [])
+    static let regex = try! NSRegularExpression(pattern: "#( [a-zA-Z0-9_]*):(.*)", options: [])
     
-    static func fromURL(_ url: URL) -> ScriptInfo {
-        var title = url.lastPathComponent
-        var extensions: Set<String>?
-        
+    static func parseDocumentation(url: URL) -> [String: String] {
         do {
             let content = try String(contentsOf: url) as NSString
             let regex = ScriptInfo.regex
@@ -72,34 +70,47 @@ struct ScriptInfo: Codable {
                 range: NSRange(location: 0, length: content.length)
             )
             
-            for x in matches {
-                let name = content.substring(with: x.range(at: 1))
-                let value = content.substring(with: x.range(at: 2))
-                
-                if name == "SCRIPT_NAME" {
-                    title = value
+            var result: [String: String] = [:]
+            
+            for match in matches {
+                func get(_ i: Int) -> String {
+                    return content.substring(with: match.range(at: i)).trimmingCharacters(in: .whitespaces)
                 }
-                
-                if name == "SCRIPT_EXTENSIONS" {
-                    extensions = Set(value.split(separator: ",").map { String($0) })
-                }
+                result[get(1)] = get(2)
             }
+            
+            return result
         } catch let error {
             dlog(error)
         }
         
-        return ScriptInfo(url: url, title: title, extensions: extensions)
+        return [:]
+    }
+    
+    static func fromURL(_ url: URL) -> ScriptInfo {
+        let info = parseDocumentation(url: url)
+        
+        func getSet(value: String) -> Set<String> {
+            let trimmed = value.split(separator: ",").map {
+                $0.trimmingCharacters(in: .whitespaces)
+            }
+            return Set(trimmed)
+        }
+        
+        return ScriptInfo(
+            url: url,
+            title: info["title"] ?? url.lastPathComponent,
+            extensions: info["extensions"].map(getSet),
+            launcher: info["launcher"] ?? "launcher"
+        )
     }
     
     static func isScript(url: URL) -> Bool {
-        if url == launcherURL {
-            return false
-        }
-        
         let name = url.lastPathComponent
         let ext = url.pathExtension
         
-        if name.starts(with: ".") {
+        
+        if name.starts(with: ".") || name.starts(with: "launcher") {
             return false
         }
         
@@ -110,22 +121,17 @@ struct ScriptInfo: Codable {
 struct RunScriptCommand: Codable {
     let currentDirectory: URL
     let script: ScriptInfo
-    let items: [URL]?
+    let items: [URL]
     
-    static func decode(url: URL) -> RunScriptCommand {
-        var string = url.absoluteString
-        let range = string.range(of: "executor://")!
-        string.replaceSubrange(range, with: "")
+    var canRun: Bool {
+        if let extensions = script.extensions {
+            for item in items {
+                if !extensions.contains(item.pathExtension) {
+                    return false
+                }
+            }
+        }
         
-
-        let data = Data(base64Encoded: string)!
-        let decoder = JSONDecoder()
-        return try! decoder.decode(self, from: data)
-    }
-    
-    func encode() -> URL {
-        let encoder = JSONEncoder()
-        let data = try! encoder.encode(self)
-        return URL(string: "executor://" + data.base64EncodedString())!
+        return true
     }
 }

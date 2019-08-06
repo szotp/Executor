@@ -1,5 +1,5 @@
-SCRIPT_NAME='Install IPA'
-SCRIPT_EXTENSIONS='ipa'
+# title: Install .ipa
+# extensions: ipa
 
 IPA=$1
 
@@ -8,3 +8,6 @@ if [[ -d $IPA ]]; then
 fi
 
 ideviceinstaller -i $IPA
+echo "Exiting..."
+sleep 2
+exit

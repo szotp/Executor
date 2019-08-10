@@ -8,15 +8,6 @@
 
 import Cocoa
 
-public protocol Trigger {
-    static var identifier: String {get}
-    
-    func matches(command: ScriptContext) -> Bool
-    
-    init?(rawValue: String)
-    var rawValue: String {get}
-}
-
 public struct IsDirectory: Trigger {
     public static let identifier: String = "isDirectory"
     
@@ -95,9 +86,8 @@ public struct PasteboardContains: Trigger {
     public var rawValue: String {
         return regex.pattern
     }
-    
-    
 }
+
 
 public struct Triggers {
     static let types: [Trigger.Type] = [
@@ -189,4 +179,13 @@ extension Triggers: Codable {
         let boxed = items.map(AnyTrigger.init)
         try boxed.encode(to: encoder)
     }
+}
+
+public protocol Trigger {
+    static var identifier: String {get}
+    
+    func matches(command: ScriptContext) -> Bool
+    
+    init?(rawValue: String)
+    var rawValue: String {get}
 }

@@ -20,6 +20,7 @@
 		1F412A8B22FEB57E009C7712 /* ExecutorKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F412A7122FEB2F3009C7712 /* ExecutorKit.framework */; };
 		1F412A9222FF09D7009C7712 /* Triggers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F412A9122FF09D7009C7712 /* Triggers.swift */; };
 		1F6DFDDE22F87CDC00589990 /* Scripts in Resources */ = {isa = PBXBuildFile; fileRef = 1F6DFDDD22F87CDC00589990 /* Scripts */; };
+		1FC13A5922FF3E9B007E7C3D /* ScriptData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC13A5822FF3E9B007E7C3D /* ScriptData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,6 +100,7 @@
 		1F412A9122FF09D7009C7712 /* Triggers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Triggers.swift; sourceTree = "<group>"; };
 		1F6DFDD322F6CD1C00589990 /* Runner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Runner.swift; sourceTree = "<group>"; };
 		1F6DFDDD22F87CDC00589990 /* Scripts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Scripts; sourceTree = "<group>"; };
+		1FC13A5822FF3E9B007E7C3D /* ScriptData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,9 +186,10 @@
 			children = (
 				1F412A7422FEB2F3009C7712 /* Info.plist */,
 				1F412A7322FEB2F3009C7712 /* ExecutorKit.h */,
+				1F6DFDD322F6CD1C00589990 /* Runner.swift */,
+				1FC13A5822FF3E9B007E7C3D /* ScriptData.swift */,
 				1F16DF7422F46A1000263E17 /* ScriptContext.swift */,
 				1F412A9122FF09D7009C7712 /* Triggers.swift */,
-				1F6DFDD322F6CD1C00589990 /* Runner.swift */,
 			);
 			path = ExecutorKit;
 			sourceTree = "<group>";
@@ -413,6 +416,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FC13A5922FF3E9B007E7C3D /* ScriptData.swift in Sources */,
 				1F412A9222FF09D7009C7712 /* Triggers.swift in Sources */,
 				1F412A7F22FEB2FE009C7712 /* ScriptContext.swift in Sources */,
 				1F412A7E22FEB2FE009C7712 /* Runner.swift in Sources */,

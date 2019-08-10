@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import ExecutorKit
 
 func copyScriptsIfNeeded() {
     let fromBundle = Bundle.main.url(forResource: "Scripts", withExtension: nil)!
@@ -36,3 +37,4 @@ func enableExtension() {
 copyScriptsIfNeeded()
 enableExtension()
 print(ScriptData.load().json)
+Triggers.printHelp()

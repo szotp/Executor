@@ -15,23 +15,29 @@ extension URL {
     }
 }
 
-struct CommandRunner {
-    let command: RunScriptCommand
+public struct CommandRunner {
+    let command: ScriptContext
+    let script: ScriptInfo
+    
+    public init(command: ScriptContext, script: ScriptInfo) {
+        self.command = command
+        self.script = script
+    }
 
-    func runInParentApp() {
+    public func runInParentApp() {
         let url: URL
-        let launcherName = command.script.launcher
+        let launcherName = script.launcher
         
         if launcherName != "none" {
-            url = scriptsURL.appendingPathComponent(command.script.launcher)
+            url = scriptsURL.appendingPathComponent(script.launcher)
         } else {
-            url = command.script.url
+            url = script.url
         }
         
         let task = try! NSUserUnixTask(url: url)
         var arguments: [String] = []
         arguments.append(command.currentDirectory.path)
-        arguments.append(command.script.url.path)
+        arguments.append(script.url.path)
         
         for item in command.items {
             arguments.append(item.path)
@@ -45,14 +51,14 @@ struct CommandRunner {
         }
     }
     
-    static func openScriptsDirectory() {
+    public static func openScriptsDirectory() {
         let url = scriptsURL
         try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: false, attributes: nil)
         NSWorkspace.shared.open(url)
     }
 }
 
-func execute(_ path: String?, _ arguments: [String]?, currentDirectoryURL: URL? = nil) {
+public func execute(_ path: String?, _ arguments: [String]?, currentDirectoryURL: URL? = nil) {
     let task = Process()
     let pipe = Pipe()
     

@@ -43,13 +43,23 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "1F5A098F22FDDE4B00148035"
+               BuildableName = "ExecutorTests.xctest"
+               BlueprintName = "ExecutorTests"
+               ReferencedContainer = "container:Executor.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1F16DF6622F4654900263E17"
-            BuildableName = "FinderExecutor.appex"
-            BlueprintName = "FinderExecutor"
+            BlueprintIdentifier = "1F16DF5122F4650900263E17"
+            BuildableName = "Executor.app"
+            BlueprintName = "Executor"
             ReferencedContainer = "container:Executor.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

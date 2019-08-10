@@ -8,6 +8,7 @@
 
 import Cocoa
 import FinderSync
+import ExecutorKit
 
 class FinderSync: FIFinderSync {
 
@@ -16,11 +17,11 @@ class FinderSync: FIFinderSync {
     override init() {
         super.init()
         
-        
+        dlog("init")
         FIFinderSyncController.default().directoryURLs = [URL(fileURLWithPath: "/")]
     }
     
-    var scripts: ScriptData!
+    var scripts = ScriptDataLoader()
     
     override func menu(for menuKind: FIMenuKind) -> NSMenu {
         let time = Date()
@@ -28,15 +29,15 @@ class FinderSync: FIFinderSync {
             dlog("\(#function) took \(-time.timeIntervalSinceNow * 1000)ms")
         }
         
-        scripts = ScriptData.load()
         let target = FIFinderSyncController.default().targetedURL()!
         let items = FIFinderSyncController.default().selectedItemURLs() ?? []
         
         let menu = NSMenu()
-        for (i, script) in scripts.script.enumerated() {
-            let command = RunScriptCommand(currentDirectory: target, script: script, items: items)
-            
-            if !command.canRun {
+        
+        
+        let command = ScriptContext(currentDirectory: target, items: items)
+        for (i, script) in scripts.value.script.enumerated() {
+            if !script.triggers.canRun(command: command) {
                 continue
             }
             
@@ -48,15 +49,15 @@ class FinderSync: FIFinderSync {
         return menu
     }
     
-    @objc func openScriptsDirectory() {
+    @objc  func openScriptsDirectory() {
         CommandRunner.openScriptsDirectory()
     }
     
     @objc func executeScript(item: NSMenuItem) {
         let target = FIFinderSyncController.default().targetedURL()!
         let items = FIFinderSyncController.default().selectedItemURLs() ?? []
-        let command = RunScriptCommand(currentDirectory: target, script: scripts.script[item.tag], items: items)
-        CommandRunner(command: command).runInParentApp()
+        let command = ScriptContext(currentDirectory: target, items: items)
+        CommandRunner(command: command, script: scripts.value.script[item.tag]).runInParentApp()
     }
 }
 

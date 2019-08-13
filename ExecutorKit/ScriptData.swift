@@ -10,9 +10,9 @@ import Cocoa
 
 public let fm = FileManager.default
 
-public func dlog(_ x: Any?) {
+public func dlog(_ x: Any?, function: StaticString = #function) {
     if let x = x {
-        NSLog("\(x)")
+        NSLog("\(function) \(x)")
     }
 }
 
@@ -23,22 +23,64 @@ public let scriptsURL: URL = {
     return url
 }()
 
-public struct ScriptData: Codable {
-    var timestamp: Date
-    public var script: [ScriptInfo]
+public struct ScriptFolder: Codable {
+    public var name: String
     
-    public static func load() -> ScriptData{
-        let dir = scriptsURL
+    public var subfolders: [ScriptFolder]
+    public var items: [ScriptInfo]
+    
+    public static func load(_ dir: URL, currentTag: inout Int) -> ScriptFolder {
+        let contents = try! fm.contentsOfDirectory(at: dir, includingPropertiesForKeys: [.isExecutableKey], options: [])
         
-        if !fm.fileExists(atPath: dir.path) {
-            try! fm.createDirectory(at: dir, withIntermediateDirectories: true, attributes: nil)
+        var result = ScriptFolder(name: dir.lastPathComponent, subfolders: [], items: [])
+        
+        for child in contents {
+            var isDirectory: ObjCBool = false
+            fm.fileExists(atPath: child.path, isDirectory: &isDirectory)
+            
+            if isDirectory.boolValue {
+                result.subfolders.append(ScriptFolder.load(child, currentTag: &currentTag))
+            } else {
+                if ScriptInfo.isScript(url: child) {
+                    let script = ScriptInfo.fromURL(child)
+                    script.tag = currentTag
+                    currentTag += 1
+                    result.items.append(script)
+                }
+            }
         }
         
-        let contents = try! fm.contentsOfDirectory(at: dir, includingPropertiesForKeys: [.isExecutableKey], options: [])
-        let scripts = contents.filter(ScriptInfo.isScript).map(ScriptInfo.fromURL)
-        let result = ScriptData(timestamp: Date(), script: scripts)
-        
         return result
+    }
+    
+    public func scriptForTag(_ tag: Int) -> ScriptInfo? {
+        if let item = items.first(where: { $0.tag == tag}) {
+            return item
+        }
+        
+        for subfolder in subfolders {
+            if let item = subfolder.scriptForTag(tag) {
+                return item
+            }
+        }
+        
+        return nil
+    }
+}
+
+public struct ScriptData: Codable {
+    var timestamp: Date
+    
+    public var root: ScriptFolder
+    
+    public static func load() -> ScriptData {
+        let dir = scriptsURL
+        var tag = 0
+        return ScriptData(timestamp: Date(), root: ScriptFolder.load(dir, currentTag: &tag))
+    }
+    
+    public func fromTag(_ tag: Int) -> ScriptInfo? {
+        return root.scriptForTag(tag)
     }
 }
 
@@ -78,7 +120,7 @@ public extension Encodable {
     }
 }
 
-public class ScriptInfo: Codable {
+public class ScriptInfo: Codable, CustomStringConvertible {
     public init(url: URL, title: String, triggers: Triggers, launcher: String) {
         self.url = url
         self.title = title
@@ -90,6 +132,7 @@ public class ScriptInfo: Codable {
     public let title: String
     public let triggers: Triggers
     public let launcher: String
+    public internal(set) var tag = 0
     
     typealias Entry = (key: String, value: String)
     
@@ -144,5 +187,9 @@ public class ScriptInfo: Codable {
         }
         
         return fm.isExecutableFile(atPath: url.path) || ext == "sh" || ext == ""
+    }
+    
+    public var description: String {
+        return "ScriptInfo(\(title))"
     }
 }

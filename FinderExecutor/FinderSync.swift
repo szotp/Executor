@@ -22,30 +22,50 @@ class FinderSync: FIFinderSync {
     }
     
     var scripts = ScriptDataLoader()
+    var current: ScriptData!
+    
+    func makeMenu(from folder: ScriptFolder, context: ScriptContext) -> NSMenu {
+        let menu = NSMenu()
+        dlog(folder.name)
+        
+        for subfolder in folder.subfolders {
+            let submenu = self.makeMenu(from: subfolder, context: context)
+            submenu.title = subfolder.name
+            
+            if submenu.items.count > 0 {
+                let subitem = menu.addItem(withTitle: subfolder.name, action: nil, keyEquivalent: "")
+                subitem.submenu = submenu
+            }
+        }
+        
+        for script in folder.items {
+            if !script.triggers.canRun(command: context) {
+                continue
+            }
+            
+            let subitem = NSMenuItem(title: script.title, action: #selector(self.executeScript), keyEquivalent: "")
+            subitem.tag = script.tag
+            menu.addItem(subitem)
+        }
+        return menu
+    }
     
     override func menu(for menuKind: FIMenuKind) -> NSMenu {
+        current = scripts.value
+        
         let time = Date()
         defer {
-            dlog("\(#function) took \(-time.timeIntervalSinceNow * 1000)ms")
+            dlog("took \(-time.timeIntervalSinceNow * 1000)ms")
         }
         
         let target = FIFinderSyncController.default().targetedURL()!
         let items = FIFinderSyncController.default().selectedItemURLs() ?? []
-        
-        let menu = NSMenu()
-        
-        
         let command = ScriptContext(currentDirectory: target, items: items)
-        for (i, script) in scripts.value.script.enumerated() {
-            if !script.triggers.canRun(command: command) {
-                continue
-            }
-            
-            let subitem = menu.addItem(withTitle: script.title, action: #selector(self.executeScript), keyEquivalent: "")
-            subitem.tag = i
-        }
-        
+
+        let menu = self.makeMenu(from: current.root, context: command)
         menu.addItem(withTitle: "Open scripts", action: #selector(self.openScriptsDirectory), keyEquivalent: "")
+        
+        dlog("done")
         return menu
     }
     
@@ -57,7 +77,10 @@ class FinderSync: FIFinderSync {
         let target = FIFinderSyncController.default().targetedURL()!
         let items = FIFinderSyncController.default().selectedItemURLs() ?? []
         let command = ScriptContext(currentDirectory: target, items: items)
-        CommandRunner(command: command, script: scripts.value.script[item.tag]).runInParentApp()
+        
+        let script = current!.fromTag(item.tag)!
+        
+        CommandRunner(command: command, script: script).runInParentApp()
     }
 }
 

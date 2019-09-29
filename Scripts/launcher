@@ -9,7 +9,7 @@ TEMP_SCRIPT+="script.sh"
 cd "$1"
 SCRIPT="$2"
 clear
-. "\$SCRIPT" $PARAMS
+"\$SCRIPT" $PARAMS
 EOM
 
 chmod +x $TEMP_SCRIPT

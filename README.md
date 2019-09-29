@@ -32,7 +32,7 @@ shows script in menu only if pasteboard contains <text>
 `# extensions: <extension>`  
 shows script in menu only if target has one of given extensions
 
-`# hasChild: <name>`
+`# hasChild: <name>`  
 shows script in menu only if target is a directory containing subdirectory or a file with given name
 
 ### Contextual scripts

@@ -16,20 +16,20 @@ Executor reads content of scripts to determine how and when they should be displ
 `# title hello world`  
 specifies title to use in menu for given string. 
 
-`# launcher [name]` 
+`# launcher [name]`  
 launcher is a script that takes another script and runs it, the default one opens Terminal.app
 this setting lets you customize launcher for given script. If you want to change it for all your scripts (for example to use different terminal app), just modify the launcher script
 
-`# launcher none` 
+`# launcher none`  
 disables launcher - script will be executed without starting terminal
 
-`# ifDirectory: <bool>`
+`# ifDirectory: <bool>`  
 shows script in menu only if target (file or directory that was right clicked) is / is not a directory
 
-`# ifPasteboard: <text>`
+`# ifPasteboard: <text>`  
 shows script in menu only if pasteboard contains <text>
 
-`# extensions: <extension>`
+`# extensions: <extension>`  
 shows script in menu only if target has one of given extensions
 
 `# hasChild: <name>`

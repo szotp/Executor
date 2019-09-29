@@ -121,15 +121,17 @@ public extension Encodable {
 }
 
 public class ScriptInfo: Codable, CustomStringConvertible {
-    public init(url: URL, title: String, triggers: Triggers, launcher: String) {
+    public init(url: URL, title: String, triggers: Triggers, launcher: String, hadConfigComments: Bool) {
         self.url = url
         self.title = title
         self.triggers = triggers
         self.launcher = launcher
+        self.hadConfigComments = hadConfigComments
     }
     
     public let url: URL
     public let title: String
+    public let hadConfigComments: Bool
     public let triggers: Triggers
     public let launcher: String
     public internal(set) var tag = 0
@@ -173,7 +175,8 @@ public class ScriptInfo: Codable, CustomStringConvertible {
             url: url,
             title: get("title") ?? url.lastPathComponent,
             triggers: Triggers(info: info),
-            launcher: get("launcher") ?? "launcher"
+            launcher: get("launcher") ?? "launcher",
+            hadConfigComments: info.count > 0
         )
     }
     

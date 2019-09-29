@@ -101,6 +101,7 @@
 		1F6DFDD322F6CD1C00589990 /* Runner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Runner.swift; sourceTree = "<group>"; };
 		1F6DFDDD22F87CDC00589990 /* Scripts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Scripts; sourceTree = "<group>"; };
 		1FC13A5822FF3E9B007E7C3D /* ScriptData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptData.swift; sourceTree = "<group>"; };
+		1FDDFE66234108FE003224FA /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +142,7 @@
 		1F16DF4922F4650900263E17 = {
 			isa = PBXGroup;
 			children = (
+				1FDDFE66234108FE003224FA /* README.md */,
 				1F412A7222FEB2F3009C7712 /* ExecutorKit */,
 				1F16DF5422F4650900263E17 /* Executor */,
 				1F16DF6822F4654900263E17 /* FinderExecutor */,

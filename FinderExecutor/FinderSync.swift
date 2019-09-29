@@ -28,6 +28,7 @@ class FinderSync: FIFinderSync {
         let menu = NSMenu()
         dlog(folder.name)
         
+        
         for subfolder in folder.subfolders {
             let submenu = self.makeMenu(from: subfolder, context: context)
             submenu.title = subfolder.name
@@ -50,9 +51,24 @@ class FinderSync: FIFinderSync {
         return menu
     }
     
-    override func menu(for menuKind: FIMenuKind) -> NSMenu {
-        current = scripts.value
+    func loadContextualScripts(target: URL, scripts: inout ScriptFolder) {
+        let local = target.appendingPathComponent("scripts")
+        var isDirectory: ObjCBool = false
+        guard fm.fileExists(atPath: local.path, isDirectory: &isDirectory), isDirectory.boolValue else {
+            return
+        }
         
+        var tag = 100000
+        var contextual = ScriptFolder.load(local, currentTag: &tag).items
+        
+        contextual.removeAll { (info) -> Bool in
+            return !info.hadConfigComments
+        }
+        
+        scripts.items.append(contentsOf: contextual)
+    }
+    
+    override func menu(for menuKind: FIMenuKind) -> NSMenu {
         let time = Date()
         defer {
             dlog("took \(-time.timeIntervalSinceNow * 1000)ms")
@@ -61,9 +77,12 @@ class FinderSync: FIFinderSync {
         let target = FIFinderSyncController.default().targetedURL()!
         let items = FIFinderSyncController.default().selectedItemURLs() ?? []
         let command = ScriptContext(currentDirectory: target, items: items)
+        
+        current = self.scripts.value
+        loadContextualScripts(target: target, scripts: &current.root)
 
         let menu = self.makeMenu(from: current.root, context: command)
-        menu.addItem(withTitle: "Open scripts", action: #selector(self.openScriptsDirectory), keyEquivalent: "")
+        menu.insertItem(withTitle: "Open scripts", action: #selector(self.openScriptsDirectory), keyEquivalent: "", at: 0)
         
         dlog("done")
         return menu
@@ -78,9 +97,12 @@ class FinderSync: FIFinderSync {
         let items = FIFinderSyncController.default().selectedItemURLs() ?? []
         let command = ScriptContext(currentDirectory: target, items: items)
         
-        let script = current!.fromTag(item.tag)!
+        guard let script = current?.fromTag(item.tag) else {
+            dlog("tag \(item.tag) not found")
+            return
+        }
         
-        CommandRunner(command: command, script: script).runInParentApp()
+        CommandRunner(command: command, script: script).executeUserUnixTask()
     }
 }
 

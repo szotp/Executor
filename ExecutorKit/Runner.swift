@@ -24,7 +24,7 @@ public struct CommandRunner {
         self.script = script
     }
 
-    public func runInParentApp() {
+    public func executeUserUnixTask() {
         let url: URL
         let launcherName = script.launcher
         

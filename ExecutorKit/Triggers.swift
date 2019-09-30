@@ -67,27 +67,21 @@ public struct HasChild: Trigger {
 
 public struct PasteboardContains: Trigger {
     public static let identifier: String = "ifPasteboard"
-    let regex: NSRegularExpression
+    let text: String
     
     public func matches(command: ScriptContext) -> Bool {
         let string = command.pasteboardString
-        let has = regex.numberOfMatches(in: string, options: [], range: NSRange(location: 0, length: string.count))
-        return has == 1
+        return string.contains(text)
     }
     
     public init?(rawValue: String) {
-        guard let regex = try? NSRegularExpression(pattern: rawValue, options: []) else {
-            return nil
-        }
-        
-        self.regex = regex
+        self.text = rawValue
     }
     
     public var rawValue: String {
-        return regex.pattern
+        return text
     }
 }
-
 
 public struct Triggers {
     static let types: [Trigger.Type] = [

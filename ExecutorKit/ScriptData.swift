@@ -138,7 +138,7 @@ public class ScriptInfo: Codable, CustomStringConvertible {
     
     typealias Entry = (key: String, value: String)
     
-    static let regex = try! NSRegularExpression(pattern: "#( [a-zA-Z0-9_]*):(.*)", options: [])
+    static let regex = try! NSRegularExpression(pattern: "# ?([a-zA-Z0-9_]*):(.*)", options: [])
     
     static func parseDocumentation(url: URL) -> [Entry] {
         do {

@@ -10,14 +10,14 @@ Finder extension that automatically displays your scripts in the menu.
 ### Documentation comments
 Executor reads content of scripts to determine how and when they should be displayed in the menu.
 
-`# title hello world`  
+`# title: hello world`  
 specifies title to use in menu for given string. 
 
-`# launcher [name]`  
+`# launcher: [name]`  
 launcher is a script that takes another script and runs it, the default one opens Terminal.app
 this setting lets you customize launcher for given script. If you want to change it for all your scripts (for example to use different terminal app), just modify the launcher script
 
-`# launcher none`  
+`# launcher: none`  
 disables launcher - script will be executed without starting terminal
 
 `# ifDirectory: <bool>`  

@@ -76,6 +76,7 @@ class FinderSync: FIFinderSync {
         
         let target = FIFinderSyncController.default().targetedURL()!
         let items = FIFinderSyncController.default().selectedItemURLs() ?? []
+        dlog(target)
         let command = ScriptContext(currentDirectory: target, items: items)
         
         current = self.scripts.value

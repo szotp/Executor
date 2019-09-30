@@ -22,11 +22,7 @@ public class ScriptContext: Codable {
     }()
     
     private(set) lazy var contents: [URL] = { () -> [URL] in
-        guard items.count == 1 else {
-            return []
-        }
-        
-        let result = try? fm.contentsOfDirectory(at: items[0], includingPropertiesForKeys: nil, options: [])
+        let result = try? fm.contentsOfDirectory(at: currentDirectory, includingPropertiesForKeys: nil, options: [])
         return result ?? []
     }()
     
